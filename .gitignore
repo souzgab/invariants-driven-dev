@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Drafts pessoais (use prefix _ para excluir do versionamento)
+_*
+**/draft_*
