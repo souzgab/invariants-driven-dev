@@ -64,3 +64,12 @@ Estima-se que <10% das histórias de backlog sejam Tier 1, mas concentram 80%+ d
 > **A pergunta que destrava tudo é: "o que esta operação NÃO PODE tocar?"**
 >
 > Se você não consegue responder, a IA também não consegue. E vai inventar.
+
+## Protocolo relacionado: Context Harness
+
+Este repo reúne protocolos de disciplina para desenvolvimento assistido por IA.
+Além das invariantes (acima, para uma unidade de trabalho de risco pontual), veja
+[`context-harness/`](context-harness/) — protocolo para manter agentes de IA
+alinhados ao estado real de um projeto ao longo de **muitas sessões**, sem depender
+da memória do agente. Extraído e generalizado a partir de um harness real que
+sustentou dezenas de sessões de trabalho quantitativo sem scope drift.
