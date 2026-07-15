@@ -118,7 +118,7 @@ em nuvem:
 ```
 Tier 1 (Semantic)    → embeddings locais (ex. LanceDB + SentenceTransformers)
 Tier 2 (Topological) → repomap simplificado injetado no prompt
-Tier 3 (Structural)  → grafo de AST local (ex. KuzuDB) — imports, classes, funções
+Tier 3 (Structural)  → grafo de AST local (ex. SQLite ou LadybugDB) — imports, classes, funções
 Tier 4 (Active)      → cache dos diffs/arquivos salvos mais recentes
 ```
 

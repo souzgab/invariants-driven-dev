@@ -21,8 +21,8 @@ segundos, adotar isto é custo de manutenção sem benefício.
 |                          cosseno; fallback textual (ex. SQLite FTS5)   |
 |  Tier 2 (Topological) — repomap simplificado, injetado direto no       |
 |                          prompt do agente                              |
-|  Tier 3 (Structural)  — grafo de AST local (ex. KuzuDB): imports,      |
-|                          classes, assinaturas de função                |
+|  Tier 3 (Structural)  — grafo de AST local (ex. SQLite ou LadybugDB):  |
+|                          imports, classes, assinaturas de função       |
 |  Tier 4 (Active)      — cache de diffs e arquivos salvos recentemente  |
 +-----------------------------------------------------------------------+
 ```
@@ -51,29 +51,37 @@ segundos, adotar isto é custo de manutenção sem benefício.
    python scripts/osma_watcher.py
    ```
 3. **Exposição via MCP** — servidor Model Context Protocol local expõe as tiers como
-   ferramentas que qualquer cliente MCP (Claude Code, Cursor) pode chamar:
+   ferramentas que qualquer cliente MCP (Claude Code, Cursor, Antigravity) pode chamar:
    - `search_codebase(query)` — busca semântica com fallback textual.
    - `get_file_dependencies(file_path)` — imports diretos + assinaturas dos alvos.
    - `get_codebase_repomap()` — visualização estrutural compacta do projeto.
    ```bash
-   fastmcp run scripts/osma_mcp.py
+   python scripts/osma_mcp.py
    ```
 
-## Integração com clientes MCP
+## Integração com clientes MCP (Configuração Dinâmica)
 
-Registrar o servidor local nas configurações do cliente (`.claude/mcp.json` ou
-equivalente):
+Para registrar o servidor local de forma agnóstica a IA em diferentes IDEs (Cursor, Claude Code, Antigravity, OpenHands, etc.), recomenda-se automatizar a geração de arquivos de configuração usando um utilitário local (ex: `scripts/setup_mcp.py`) que resolva de forma dinâmica os caminhos absolutos do interpretador python e dos scripts.
+
+**Exemplo de configuração dinamicamente gerada para o `.claude/mcp.json` local ou `claude_desktop_config.json` global:**
 
 ```json
 {
   "mcpServers": {
     "osma": {
-      "command": "/caminho/para/.venv/bin/python",
-      "args": ["/caminho/para/scripts/osma_mcp.py"]
+      "command": "/caminho/absoluto/do/workspace/.venv-osma/bin/python",
+      "args": ["/caminho/absoluto/do/workspace/scripts/osma_mcp.py"]
     }
   }
 }
 ```
+
+## Escolha do Motor de Grafos (KuzuDB vs SQLite)
+
+Embora bancos de dados de grafos dedicados (como KuzuDB) sejam excelentes para grandes repositórios com alta densidade de relacionamentos e queries complexas de profundidade variável, a migração do OSMA para **SQLite relacional clássico** provou-se ideal para bases de tamanho médio (~100-500 arquivos):
+- **Sem Dependência Binária:** O SQLite faz parte da biblioteca padrão do Python, removendo fricções de instalação e compilação nativa.
+- **Conexão Unificada:** É possível usar o mesmo arquivo de banco de dados (`file_hashes.db`) que já armazena hashes e tabelas FTS.
+- **Complexidade de Query Reduzida:** Queries de RepoMap e dependências diretas de imports se traduzem perfeitamente em queries SQL com Joins simples e subconsultas de agregação extremamente rápidas.
 
 ## Cuidado com conflito de dependências
 
