@@ -60,19 +60,19 @@ Pergunta 2: O comportamento errado pode (a) destruir dado, (b) afetar
   - NÃO → Tier 2.
 ```
 
-## Tier 1 conhecidos no domínio (gamificação de concessionária)
+## Exemplo de Domínio (ex: Campanhas, Pontuação, Gamificação)
 
-Lista inicial — revisar com tech lead, expandir conforme incidentes:
+Lista de exemplo de operações Tier 1 a serem mapeadas junto com o Tech Lead:
 
 - [ ] Exclusão de campanha (qualquer escopo)
-- [ ] Encerramento / expiração de campanha
-- [ ] Aplicação de campanha em lote (CSV → SQS → persistência)
-- [ ] Apuração de pontos / resultado de campanha
-- [ ] Recálculo retroativo de pontuação
-- [ ] Atribuição / revogação de benefício
-- [ ] Reset de período de apuração
-- [ ] Processamento de fila SQS com efeito persistente
-- [ ] Migração de dado entre versões de schema
+- [ ] Encerramento ou expiração forçada de benefícios
+- [ ] Ingestão de arquivos em lote (CSV/JSON -> persistência)
+- [ ] Apuração de pontos / processamento de saldos
+- [ ] Recálculo retroativo de histórico financeiro ou de pontuação
+- [ ] Atribuição ou revogação manual de acessos críticos
+- [ ] Reset/fechamento de períodos de apuração contábil
+- [ ] Processamento de filas de mensageria com efeito persistente e não-idempotente
+- [ ] Migração destrutiva de dados entre versões de schema
 
 ## Anti-padrão de escopo
 
