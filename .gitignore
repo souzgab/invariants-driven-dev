@@ -12,3 +12,7 @@ Thumbs.db
 # Drafts pessoais (use prefix _ para excluir do versionamento)
 _*
 **/draft_*
+
+# Harness runtime state
+.agents/
+

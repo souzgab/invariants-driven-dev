@@ -3,13 +3,13 @@
 Fonte única de status de medição por sinal/recomendação/score exibido ao usuário
 final. Regra: **nenhum elemento com formato de veredito aparece em nenhuma
 superfície sem medição que o sustente.** Este arquivo é essa medição. Detalhe da
-metodologia: [`../docs/05-gate-de-evidencia.md`](../docs/05-gate-de-evidencia.md).
+metodologia: [`05-gate-de-evidencia.md`](05-gate-de-evidencia.md).
 
 **Gate:** sinal novo em qualquer superfície exige uma linha aqui antes de ir a
 produção; mudança em cálculo já exibido exige re-medição da linha correspondente.
 
 **Enum de `status`:** `sem-medicao` · `sem-edge`/`nao-confirmado` ·
-`edge-condicional[contexto]` · `com-edge`/`confirmado` · `amostra-insuficiente`.
+`edge-condicional[contexto]` · `com-edge`/`confirmado` · `amostra-insuficiente` · `abandono`.
 
 ---
 

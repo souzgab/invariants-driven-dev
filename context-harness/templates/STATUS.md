@@ -7,7 +7,7 @@ Convenções gerais ficam em [AGENTS.md](../AGENTS.md).
 Este arquivo tem duas partes: um **resumo vivo** (seções abaixo, sempre reescrito
 para refletir o estado atual) e um **Histórico** no final (movido para
 `docs/archive/STATUS_ARCHIVE.md` assim que crescer demais — ver
-`../../docs/03-niveis-de-maturidade-e-gate.md` sobre orçamento de tokens).
+`03-niveis-de-maturidade-e-gate.md` sobre orçamento de tokens).
 
 **Última atualização:** <AAAA-MM-DD>
 
@@ -19,6 +19,15 @@ para refletir o estado atual) e um **Histórico** no final (movido para
 - **✅ <Último marco concluído, com data e referência de decisão>**
 - **⚠️ <Decisão pendente do usuário, se houver — descreva as opções>**
 - **Status de <área/frente de trabalho>:** <resumo de uma linha>
+
+---
+
+## 🗣️ Resumo leigo (opcional)
+
+<!-- Visão em linguagem acessível (não-técnica) do estado atual do projeto para stakeholders e comunicação executiva. -->
+
+- **O que foi feito:** <resumo em português simples do impacto entregue>
+- **O que significa:** <por que isso importa sem jargões de implementação>
 
 ---
 
@@ -42,4 +51,4 @@ Legenda: ✅ feito · 🟡 parcial · ⬜ aberto · Sev: P0 bloqueante · P1 alt
 
 ## 📜 Histórico completo de sessões
 
-> Arquivado em: [docs/archive/STATUS_ARCHIVE.md](../archive/STATUS_ARCHIVE.md)
+> Arquivado em: [docs/archive/STATUS_ARCHIVE.md](archive/STATUS_ARCHIVE.md)

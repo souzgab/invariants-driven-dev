@@ -1,6 +1,6 @@
 # Context Harness
 
-Protocolo para manter agentes de IA (Claude Code, Cursor, Codex, OpenHands, humanos)
+Protocolo para manter agentes de IA (Claude Code, Cursor, Codex, OpenHands, Antigravity, humanos)
 alinhados ao estado real de um projeto ao longo de muitas sessões, sem depender da
 memória do agente e sem estourar a janela de contexto.
 
@@ -10,6 +10,24 @@ onde sustentou dezenas de sessões de trabalho quantitativo (SDDs, validação d
 calibração, medição de edge) sem scope drift nem retrabalho por esquecimento de
 decisões já tomadas. Ver [`examples/olympo-case-study.md`](examples/olympo-case-study.md)
 para o caso real, com números.
+
+---
+
+## ⚡ Replicação Rápida (Skill `harness-bootstrap`)
+
+Para construir o harness em qualquer repositório de forma 100% guiada e em menos de 5 minutos, instale a skill interativa [`templates/skills/harness-bootstrap.md`](templates/skills/harness-bootstrap.md) no seu agente e execute:
+
+```bash
+/harness-bootstrap
+```
+
+A skill aplica o protocolo **Grill-Me** (entrevista sequencial uma pergunta por vez, com opções `(Recomendado)`):
+1. Inspeciona a stack e a estrutura do repositório autonomamente.
+2. Pergunta apenas o essencial (regras não-negociáveis, gates de maturidade, política de comandos).
+3. Cria os artefatos (`AGENTS.md`, `STATUS.md`, `DECISIONS.md`, `update_harness.py`, `CLAUDE.md`, `GEMINI.md`).
+4. Inicializa o estado com `STATUS_VIVO.json`.
+
+---
 
 ## Problema que resolve
 
@@ -43,6 +61,8 @@ cobrem o essencial:
 Regra de ordem de leitura para qualquer agente em cold-start: **`STATUS.md` primeiro**
 ("você está aqui"), depois `AGENTS.md` (convenções estáveis), `DECISIONS.md` e
 `EVIDENCE.md` sob demanda (grep pelo tópico, não leitura integral).
+
+Ponteiros leves como [`templates/CLAUDE.md`](templates/CLAUDE.md) e [`templates/GEMINI.md`](templates/GEMINI.md) redirecionam diferentes ferramentas de IA diretamente para o `AGENTS.md` sem duplicação.
 
 Detalhe de cada arquivo e por que a separação importa:
 [`docs/01-framework-artefatos-sobre-memoria.md`](docs/01-framework-artefatos-sobre-memoria.md).
@@ -97,6 +117,15 @@ A lista do que está **travado** deve estar escrita no próprio `AGENTS.md` — 
 regra abstrata, mas como checklist literal que qualquer agente lê antes de agir.
 Detalhe: [`docs/03-niveis-de-maturidade-e-gate.md`](docs/03-niveis-de-maturidade-e-gate.md).
 
+## Sinapse Viva & Política de Execução de Comandos (`COMMAND_POLICY`)
+
+Para evitar que o agente execute comandos perigosos, caros ou destrutivos sem autorização, o ecossistema registra uma política explícita de execução:
+- `auto`: Comandos seguros/read-only (ex: `pytest`, `git status`).
+- `confirm`: Comandos que alteram estado ou usam recursos (ex: `sintetizar`, `build`).
+- `never`: Ações sensíveis estritamente vedadas ao agente (ex: `decidir`, `git push --force`).
+
+Detalhe: [`docs/07-sinapse-viva-e-politica-de-comandos.md`](docs/07-sinapse-viva-e-politica-de-comandos.md).
+
 ## Camada opcional: gate de evidência para sistemas que fazem afirmações
 
 Se o projeto expõe algum tipo de veredito/score/sinal ao usuário final (não é
@@ -140,20 +169,15 @@ correspondente entra no linter no mesmo commit. Ver
 
 ## Como adotar em um projeto novo
 
-1. Crie os 4 arquivos na raiz (`AGENTS.md`) e em `docs/` (`STATUS.md`,
-   `DECISIONS.md`), usando os templates em [`templates/`](templates/).
-2. Preencha `STATUS.md` com o estado real hoje — branch, o que está feito, próxima
-   ação. Não invente aspiração; descreva o que existe.
-3. Preencha `AGENTS.md` com convenções **extraídas do código já escrito**, não do
-   que você gostaria que existisse.
-4. Registre a primeira decisão em `DECISIONS.md` (D-001) — pode ser a própria decisão
-   de adotar o harness.
-5. Copie `scripts/update_harness.py` e rode-o ao final de cada sessão com mudança
-   material.
-6. Escreva a seção "Nível 1 (ativo) / Nível 2+ (gated)" no fim do `AGENTS.md` —
-   decida com o dono do projeto o que fica travado.
-7. Só depois disso considere `EVIDENCE.md` (se o sistema faz afirmações/veredictos)
-   e OSMA (se o repo já é grande o suficiente pra doer).
+1. **Modo Automático (Skill)**: Execute `/harness-bootstrap` com a Skill [`templates/skills/harness-bootstrap.md`](templates/skills/harness-bootstrap.md) carregada no seu agente.
+2. **Modo Manual**:
+   - Crie os 4 arquivos na raiz (`AGENTS.md`) e em `docs/` (`STATUS.md`, `DECISIONS.md`), usando os templates em [`templates/`](templates/).
+   - Crie os ponteiros [`CLAUDE.md`](templates/CLAUDE.md) e [`GEMINI.md`](templates/GEMINI.md).
+   - Preencha `STATUS.md` com o estado real hoje.
+   - Preencha `AGENTS.md` com convenções **extraídas do código já escrito**.
+   - Registre a primeira decisão em `DECISIONS.md` (D-001).
+   - Copie `scripts/update_harness.py` e rode-o ao final de cada sessão.
+   - Escreva a seção "Nível 1 (ativo) / Nível 2+ (gated)" no fim do `AGENTS.md`.
 
 ## Relação com o protocolo de Invariantes deste repo
 

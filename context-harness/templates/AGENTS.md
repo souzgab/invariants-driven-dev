@@ -2,8 +2,9 @@
 
 > Fonte canônica de instruções de projeto, agnóstica de ferramenta. Lida por
 > qualquer agente/CLI que suporte a convenção `AGENTS.md` (Claude Code, Cursor,
-> Aider, Codex CLI, GitHub Copilot coding agent, etc.). Se existir `CLAUDE.md` neste
-> repo, ele é só um apontador de compatibilidade — este arquivo é o que importa.
+> Aider, Codex CLI, GitHub Copilot coding agent, etc.). Se existirem apontadores de
+> compatibilidade como `CLAUDE.md`, `GEMINI.md`, etc. neste repo, eles são apenas
+> redirecionadores de compatibilidade — este arquivo (`AGENTS.md`) é a fonte única da verdade.
 
 Convenções **extraídas do código existente**. Não são aspiracionais: descrevem o que
 o repo já faz hoje. Ao escrever código novo, siga estes padrões; ao divergir,
@@ -31,7 +32,7 @@ aqui": branch atual, o que está em andamento, próxima ação concreta. Este ar
 
 <!-- Regras que corrompem o sistema se quebradas — a seção mais valiosa deste
      arquivo. Cada regra aqui deveria, idealmente, ter uma verificação
-     correspondente no linter de conformidade (ver ../docs/06-linter-de-conformidade.md). -->
+     correspondente no linter de conformidade (ver docs/06-linter-de-conformidade.md). -->
 
 ## O que NÃO fazer
 
@@ -51,14 +52,30 @@ aqui": branch atual, o que está em andamento, próxima ação concreta. Este ar
 # Lint
 ```
 
+## Política de Comandos (COMMAND_POLICY)
+
+Toda ação ou comando no repositório segue uma das três categorias de permissão (ver `docs/07-sinapse-viva-e-politica-de-comandos.md`):
+
+- **`auto`**: Comandos read-only ou de verificação segura. O agente pode disparar autonomamente (ex: `pytest -q`, `git status`, `ritual status`).
+- **`confirm`**: Comandos que consomem recursos (LLM, APIs) ou alteram estados locais. Exigem confirmação explícita do operador antes de disparar (ex: `ritual sintetizar`, `npm run build`).
+- **`never`**: Comandos de alta sensibilidade ou tomada de decisão humana. Estritamente proibidos de serem disparados pelo agente via chat/ferramentas (ex: `ritual decidir`, `ritual fechar`, `git push --force`, `deploy prod`).
+
 ---
 
 ## Manutenção e Fluxo do Harness
 
 Este projeto utiliza um harness de contexto de-biasado e sustentação automática.
 Convenções gerais: este arquivo. Estado vivo: [docs/STATUS.md](docs/STATUS.md).
-Decisões: [docs/DECISIONS.md](docs/DECISIONS.md). Medição de sinais/vereditos (se
-aplicável): [docs/EVIDENCE.md](docs/EVIDENCE.md).
+Decisões: [docs/DECISIONS.md](docs/DECISIONS.md). Medição de sinais/vereditos (opcional para repositórios não-quantitativos): [docs/EVIDENCE.md](docs/EVIDENCE.md).
+
+### Topologias do Repositório
+
+O harness suporta três arquiteturas de integração:
+- **Standalone**: Repositório autônomo contendo todos os artefatos (`STATUS.md`, `DECISIONS.md`, `AGENTS.md`) localmente em `docs/` ou na raiz.
+- **Pointer**: Repositório leve cujos arquivos servem como ponteiros para um repositório canônico/irmão.
+- **Vault-Integrated**: O repositório reflete/integra seu estado vivo e decisões em um vault central externo (ex: Obsidian), mantendo specs de código em `docs/specs/` ou `docs/sdd/`.
+
+> **Nota sobre `EVIDENCE.md`**: O arquivo `docs/EVIDENCE.md` é **opcional**, aplicável a repositórios quantitativos/preditivos que expõem sinais/scores. Repositórios não-quantitativos/não-preditivos podem omiti-lo.
 
 Ao finalizar qualquer sessão de trabalho com mudanças materiais, execute:
 ```bash
@@ -78,7 +95,7 @@ automação de risco.
 - `AGENTS.md` — este arquivo, convenções reais, fonte canônica
 - `docs/STATUS.md` — estado vivo: o que está feito, em andamento, próxima ação
 - `docs/DECISIONS.md` — log de decisões (append-only)
-- `docs/EVIDENCE.md` — status de medição por sinal/veredito exibido (se aplicável)
+- `docs/EVIDENCE.md` — status de medição por sinal/veredito exibido (opcional para repositórios não-quantitativos)
 - Specs de implementação com requisitos testáveis (`docs/specs/` ou equivalente)
 - Suíte de validação empírica já existente (não framework novo)
 
